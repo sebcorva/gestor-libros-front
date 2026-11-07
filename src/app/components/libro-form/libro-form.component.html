@@ -1,0 +1,53 @@
+<section class="libro-form">
+  <a routerLink="/libros" class="volver">← Volver al listado</a>
+
+  <h2>{{ idEdicion() === null ? 'Nuevo libro' : 'Editar libro #' + idEdicion() }}</h2>
+
+  @if (error()) {
+    <p class="aviso-error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando...</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" formControlName="titulo" [class.invalido]="errorDe('titulo')" />
+      @if (errorDe('titulo'); as msg) {
+        <small class="error-campo">{{ msg }}</small>
+      }
+
+      <label for="autor">Autor</label>
+      <input id="autor" type="text" formControlName="autor" [class.invalido]="errorDe('autor')" />
+      @if (errorDe('autor'); as msg) {
+        <small class="error-campo">{{ msg }}</small>
+      }
+
+      <label for="anioPublicacion">Año de publicación</label>
+      <input
+        id="anioPublicacion"
+        type="number"
+        min="1"
+        step="1"
+        formControlName="anioPublicacion"
+        [class.invalido]="errorDe('anioPublicacion')"
+      />
+      @if (errorDe('anioPublicacion'); as msg) {
+        <small class="error-campo">{{ msg }}</small>
+      }
+
+      <label for="genero">Género</label>
+      <input id="genero" type="text" formControlName="genero" [class.invalido]="errorDe('genero')" />
+      @if (errorDe('genero'); as msg) {
+        <small class="error-campo">{{ msg }}</small>
+      }
+
+      <div class="acciones">
+        <button type="submit" class="btn btn-primario" [disabled]="guardando() || form.disabled">
+          {{ guardando() ? 'Guardando...' : 'Guardar' }}
+        </button>
+        <a routerLink="/libros" class="btn">Cancelar</a>
+      </div>
+    </form>
+  }
+</section>

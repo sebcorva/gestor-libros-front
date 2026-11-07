@@ -1,0 +1,70 @@
+.volver {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1f6feb;
+  text-decoration: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+}
+
+label {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+input {
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
+
+input.invalido {
+  border-color: #d1242f;
+}
+
+.error-campo {
+  margin-top: 0.25rem;
+  color: #d1242f;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn-primario {
+  background: #1f6feb;
+  border-color: #1f6feb;
+  color: #fff;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aviso-error {
+  padding: 0.75rem;
+  border: 1px solid #d1242f;
+  border-radius: 4px;
+  background: #ffebe9;
+  color: #82071e;
+}
