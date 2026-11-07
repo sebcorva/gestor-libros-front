@@ -1,5 +1,9 @@
 <header class="barra">
-  <h1>Gestor de Libros</h1>
+  <h1><a routerLink="/libros">Gestor de Libros</a></h1>
+  <nav>
+    <a routerLink="/libros" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">Listado</a>
+    <a routerLink="/libros/nuevo" routerLinkActive="activo">Nuevo libro</a>
+  </nav>
 </header>
 
 <main class="contenido">

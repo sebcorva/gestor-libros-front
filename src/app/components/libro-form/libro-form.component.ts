@@ -11,10 +11,10 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { Libro } from '../../models/libro';
 import { LibroService } from '../../services/libro.service';
+import { mensajeError } from '../../utils/mensaje-error';
 
 type Campo = 'titulo' | 'autor' | 'anioPublicacion' | 'genero';
 
-// Equivalente a @NotBlank: rechaza vacío y solo espacios.
 function noVacio(control: AbstractControl): ValidationErrors | null {
   const valor = control.value;
   return typeof valor === 'string' && valor.trim() === '' ? { required: true } : null;
@@ -48,13 +48,12 @@ export class LibroFormComponent implements OnInit {
   protected readonly cargando = signal(false);
   protected readonly guardando = signal(false);
   protected readonly error = signal<string | null>(null);
-  // Errores 400 del backend, campo -> mensaje.
   protected readonly erroresServidor = signal<Partial<Record<Campo, string>>>({});
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');
     if (param === null) {
-      return; 
+      return;
     }
 
     const id = Number(param);
@@ -75,7 +74,9 @@ export class LibroFormComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.error.set(
-          err.status === 404 ? `No existe un libro con ID ${id}.` : this.mensajeError(err),
+          err.status === 404
+            ? `No existe un libro con ID ${id}.`
+            : mensajeError(err, 'No se pudo cargar el libro.'),
         );
         this.form.disable();
         this.cargando.set(false);
@@ -98,7 +99,8 @@ export class LibroFormComponent implements OnInit {
     };
 
     const id = this.idEdicion();
-    const peticion = id === null ? this.libroService.create(libro) : this.libroService.update(id, libro);
+    const peticion =
+      id === null ? this.libroService.create(libro) : this.libroService.update(id, libro);
 
     this.guardando.set(true);
     this.error.set(null);
@@ -120,7 +122,7 @@ export class LibroFormComponent implements OnInit {
         } else if (err.status === 404) {
           this.error.set('El libro ya no existe.');
         } else {
-          this.error.set(this.mensajeError(err));
+          this.error.set(mensajeError(err, 'No se pudo guardar el libro.'));
         }
       },
     });
@@ -135,15 +137,5 @@ export class LibroFormComponent implements OnInit {
       if (e['min'] || e['pattern']) return 'Debe ser un número entero positivo.';
     }
     return this.erroresServidor()[campo] ?? null;
-  }
-
-  private mensajeError(err: HttpErrorResponse): string {
-    if (err.status === 0) {
-      return 'No se pudo conectar con el servidor. ¿Está corriendo gestor-libros-ms?';
-    }
-    if (err.status >= 500) {
-      return 'Error interno del servidor. Intenta más tarde.';
-    }
-    return 'No se pudo guardar el libro.';
   }
 }

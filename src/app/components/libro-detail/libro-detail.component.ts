@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { Libro } from '../../models/libro';
 import { LibroService } from '../../services/libro.service';
+import { mensajeError } from '../../utils/mensaje-error';
 
 // Vista: muestra el detalle de un libro según el :id de la URL.
 @Component({
@@ -37,22 +38,13 @@ export class LibroDetailComponent implements OnInit {
         this.cargando.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        this.error.set(this.mensajeError(err, id));
+        this.error.set(
+          err.status === 404
+            ? `No existe un libro con ID ${id}.`
+            : mensajeError(err, 'No se pudo cargar el libro.'),
+        );
         this.cargando.set(false);
       },
     });
-  }
-
-  private mensajeError(err: HttpErrorResponse, id: number): string {
-    if (err.status === 404) {
-      return `No existe un libro con ID ${id}.`;
-    }
-    if (err.status === 0) {
-      return 'No se pudo conectar con el servidor. ¿Está corriendo gestor-libros-ms?';
-    }
-    if (err.status >= 500) {
-      return 'Error interno del servidor. Intenta más tarde.';
-    }
-    return 'No se pudo cargar el libro.';
   }
 }

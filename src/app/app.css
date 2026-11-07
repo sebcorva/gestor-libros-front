@@ -1,4 +1,7 @@
 .barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1rem 2rem;
   background: #24292f;
   color: #fff;
@@ -7,6 +10,26 @@
 .barra h1 {
   margin: 0;
   font-size: 1.25rem;
+}
+
+.barra a {
+  color: #fff;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+nav a {
+  opacity: 0.75;
+}
+
+nav a:hover,
+nav a.activo {
+  opacity: 1;
+  text-decoration: underline;
 }
 
 .contenido {

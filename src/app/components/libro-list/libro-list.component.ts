@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 
 import { Libro } from '../../models/libro';
 import { LibroService } from '../../services/libro.service';
+import { mensajeError } from '../../utils/mensaje-error';
 
 // Vista: muestra el listado y captura las acciones del usuario.
 // Sin providers: usa la única instancia (Singleton) de LibroService.
@@ -16,7 +17,6 @@ import { LibroService } from '../../services/libro.service';
 export class LibroListComponent implements OnInit {
   private readonly libroService = inject(LibroService);
 
-  // signal: Angular es zoneless, sin signal la vista no se refresca al llegar los datos.
   protected readonly libros = signal<Libro[]>([]);
   protected readonly cargando = signal(true);
   protected readonly error = signal<string | null>(null);
@@ -35,7 +35,7 @@ export class LibroListComponent implements OnInit {
         this.cargando.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        this.error.set(this.mensajeError(err, 'No se pudo cargar el listado.'));
+        this.error.set(mensajeError(err, 'No se pudo cargar el listado.'));
         this.cargando.set(false);
       },
     });
@@ -54,18 +54,8 @@ export class LibroListComponent implements OnInit {
           this.error.set('El libro ya no existe.');
           return;
         }
-        this.error.set(this.mensajeError(err, 'No se pudo eliminar el libro.'));
+        this.error.set(mensajeError(err, 'No se pudo eliminar el libro.'));
       },
     });
-  }
-
-  private mensajeError(err: HttpErrorResponse, porDefecto: string): string {
-    if (err.status === 0) {
-      return 'No se pudo conectar con el servidor. ¿Está corriendo gestor-libros-ms?';
-    }
-    if (err.status >= 500) {
-      return 'Error interno del servidor. Intenta más tarde.';
-    }
-    return porDefecto;
   }
 }
