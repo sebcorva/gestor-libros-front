@@ -1,0 +1,30 @@
+<section class="libro-detail">
+  <a routerLink="/libros" class="volver">← Volver al listado</a>
+
+  @if (cargando()) {
+    <p>Cargando...</p>
+  } @else if (error()) {
+    <p class="aviso-error" role="alert">{{ error() }}</p>
+  } @else if (libro(); as libro) {
+    <h2>{{ libro.titulo }}</h2>
+
+    <dl>
+      <dt>ID</dt>
+      <dd>{{ libro.id }}</dd>
+
+      <dt>Título</dt>
+      <dd>{{ libro.titulo }}</dd>
+
+      <dt>Autor</dt>
+      <dd>{{ libro.autor }}</dd>
+
+      <dt>Año de publicación</dt>
+      <dd>{{ libro.anioPublicacion }}</dd>
+
+      <dt>Género</dt>
+      <dd>{{ libro.genero }}</dd>
+    </dl>
+
+    <a [routerLink]="['/libros', libro.id, 'editar']" class="btn">Editar</a>
+  }
+</section>

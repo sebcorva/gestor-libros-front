@@ -1,0 +1,49 @@
+<section class="libro-list">
+  <header>
+    <h2>Libros</h2>
+    <a routerLink="/libros/nuevo" class="btn btn-primario">+ Nuevo libro</a>
+  </header>
+
+  @if (error()) {
+    <p class="aviso-error" role="alert">{{ error() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando...</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Autor</th>
+          <th>Año</th>
+          <th>Género</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (libro of libros(); track libro.id) {
+          <tr>
+            <td>{{ libro.id }}</td>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.anioPublicacion }}</td>
+            <td>{{ libro.genero }}</td>
+            <td class="acciones">
+              <a [routerLink]="['/libros', libro.id]" class="btn">Ver</a>
+              <a [routerLink]="['/libros', libro.id, 'editar']" class="btn">Editar</a>
+              <button type="button" class="btn btn-peligro" (click)="eliminar(libro)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="vacio">No hay libros registrados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>
